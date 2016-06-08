@@ -28,20 +28,19 @@ int main(int argc, char* argv[]){
 	//prompt user for a length for the string
 	cout << "Enter in the length of password:";
 	cin >> length;
+	cout << endl;
 	
 	srand(time(0));
 		
 	//generate a random string given a length	
 	for(int i = 0; i < length; i++){
-		randNum = rand()%2; // don't want to include numbers yet
+		randNum = rand()%3;
 		if(randNum == 0)
 			password.append(&charSet[rand()%26],1);
 		if(randNum == 1)
 			password.append(&capCharSet[rand()%26],1);
-		
-		//this doesn't work yet
 		if(randNum == 2)
-			password.append(&numSet[rand()%26],1);
+			password.append(&numSet[rand()%10],1);
 	}
 	
 	//display the output
