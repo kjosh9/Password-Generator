@@ -27,9 +27,14 @@ int main(int argc, char* argv[]){
 	int randNum;
 	int setting =  2;
 	char response;
+	bool PassWorks = false;
+	bool ContainsLower = false;
+	bool ContainsUpper = false;
+	bool ContainsNum = false;
+	bool ContainsSpec = false;
 	
 	
-	// prompt user for a length for the string
+	//prompt user for a length for the string
 	cout << "Enter in the length of password:";
 	cin >> length;
 	cout << endl;
@@ -38,8 +43,8 @@ int main(int argc, char* argv[]){
 	cin >> response;
 	
 	
-	// with this set up, if the password must contain at least one
-	// special character, then it must contain at least one number
+	//with this set up, if the password must contain at least one
+	//special character, then it must contain at least one number
 	if(response == 'y' || response == 'Y'){
 		cout << "Should the password contain at least one special character? (Y/N)" << endl;
 		cin >> response;
@@ -59,32 +64,69 @@ int main(int argc, char* argv[]){
 		setting = 2;
 	}
 	else{
-		// we want to throw an error here if the 
-		// response is not accepted
+		//we want to throw an error here if the 
+		//response is not accepted
 		cout << "Incorrect entry" << endl;
 	}
 	
 	srand(time(0));
 		
-	// generate a random string given a length
-	// this does not guarentee that any of these 
-	// characters must be included in the string
-	for(int i = 0; i < length; i++){
-		randNum = rand()%setting;
-		if(randNum == 0)
-			password.append(&charSet[rand()%26],1);
-		if(randNum == 1)
-			password.append(&capCharSet[rand()%26],1);
-		if(randNum == 2)
-			password.append(&numSet[rand()%10],1);
-		if(randNum == 3)
-			password.append(&specChar[rand()%specChar.length()],1);
+	//need to find a better way to handle this error
+	if(length < setting){
+		cout << "The specified length of password is too small";
+		return 0;
+	}
+		
+	//generate a random string given a length
+	//this structure will gaurentee that the password meets
+	//the specifications provided by the user. 
+	while (PassWorks == false && length >= setting){
+		for(int i = 0; i < length; i++){
+			randNum = rand()%setting;
+			if(randNum == 0){
+				password.append(&charSet[rand()%26],1);
+				ContainsLower = true;
+			}
+			if(randNum == 1){
+				password.append(&capCharSet[rand()%26],1);
+				ContainsUpper = true;
+			}
+			if(randNum == 2){
+				password.append(&numSet[rand()%10],1);
+				ContainsNum = true;
+			}
+			if(randNum == 3){
+				password.append(&specChar[rand()%specChar.length()],1);
+				ContainsSpec = true;
+			}
+		}
+		
+		//checks to make sure that the password includes all of the 
+		//requirements specified by the user
+		switch(setting){
+			case 2: if(ContainsLower == true && ContainsUpper == true)
+						PassWorks = true;
+					break;
+					
+			case 3: if(ContainsLower == true && ContainsUpper == true && ContainsNum == true)
+						PassWorks = true;
+					break;
+			
+			case 4: if(ContainsLower == true && ContainsUpper == true && ContainsNum == true && ContainsSpec == true)
+						PassWorks = true;
+					break;
+			default: 
+					PassWorks = false;
+					break;
+		}
+		
+	
 	}
 	
-	// display the output
+	//display the output
 	cout << "Password is: " << password << endl;
 
-	// future work will include the uniqueness of each password
+	//future work will include the uniqueness of each password
 	
 	return 0;
 }
