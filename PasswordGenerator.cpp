@@ -13,6 +13,7 @@
 #include<string>
 #include<cstdlib>
 #include<time.h>
+#include<iomanip>
 
 using namespace std;
 
@@ -32,6 +33,7 @@ int main(int argc, char* argv[]){
 	bool ContainsUpper = false;
 	bool ContainsNum = false;
 	bool ContainsSpec = false;
+	int chance = 1;
 	
 	
 	//prompt user for a length for the string
@@ -81,6 +83,10 @@ int main(int argc, char* argv[]){
 	//this structure will gaurentee that the password meets
 	//the specifications provided by the user. 
 	while (PassWorks == false && length >= setting){
+		
+		//start with a cleared password
+		password = "";
+		
 		for(int i = 0; i < length; i++){
 			randNum = rand()%setting;
 			if(randNum == 0){
@@ -123,10 +129,51 @@ int main(int argc, char* argv[]){
 	
 	}
 	
+	//this section while produce the uniqueness of the password
+	switch(setting){
+		case 2: 
+				//two must be of a known subset of available characters
+				chance = chance * (26) * (26);
+				
+				//the rest must be of the entire set of characters available
+				for(int j=0; j < (length - setting); j++){
+					chance = chance * 52;					
+				}
+				
+				break;
+				
+		case 3: 
+				//three must be of a known subset of available characters
+				chance = chance * (26) * (26) * (10);
+				
+				//the rest must be of the entire set of characters available
+				for(int j=0; j < (length - setting); j++){
+					chance = chance * 62;					
+				}
+		
+				break;
+		
+		case 4: 
+				//four must be of a known subset of available characters
+				chance = chance * (26) * (26) * (10) * (specChar.length());
+				
+				//the rest must be of the entire set of characters available
+				for(int j=0; j < (length - setting); j++){
+					chance = chance * (62 + specChar.length());					
+				}
+			
+				break;
+		default: 
+				chance = 1;
+				break;
+	}
+	
 	//display the output
 	cout << "Password is: " << password << endl;
-
-	//future work will include the uniqueness of each password
+				
+	//display the uniqueness
+	cout << endl << "Among passwords of the same length and requirements " << endl << "this password is 1 in "; 
+	cout << chance << endl;
 	
 	return 0;
 }
